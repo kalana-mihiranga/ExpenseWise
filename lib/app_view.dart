@@ -20,7 +20,8 @@ class MyAppView extends StatelessWidget {
 
         )
       ),
-home:HomeScreen(),
+
+      home:HomeScreen(),
     );
   }
 }
