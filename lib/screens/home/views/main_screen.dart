@@ -9,77 +9,99 @@ class MainScreen extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child: Column(
+        child:
+        Column(
           children: [
             Container(
 
-              child:
-              Row(
+              child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                   children: [
-                Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
+                    Row(
                       children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                              shape: BoxShape.circle, color: Colors.blue),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Container(
+                              width: 50,
+                              height: 50,
+                              decoration: const BoxDecoration(
+                                  shape: BoxShape.circle, color: Colors.blue),
+                            ),
+                            Icon(
+                              CupertinoIcons.person_fill,
+                              color: Colors.black,
+                            ),
+                          ],
                         ),
-                        Icon(
-                          CupertinoIcons.person_fill,
-                          color: Colors.black,
-                        ),
-
-                      ],
-                    ), Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
                             children: [
                               Text(
                                 "welcome",
-                                style: TextStyle(fontSize: 12, fontWeight: FontWeight.w600),
+                                style: TextStyle(
+                                    fontSize: 12, fontWeight: FontWeight.w600),
                               ),
                               Text(
                                 "Kalana Mi",
-                                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                                style: TextStyle(
+                                    fontSize: 20, fontWeight: FontWeight.bold),
                               ),
                             ],
                           ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 8,
-                ),
-                Container(
-
-
-                  child: Row(
-
-
-
-                    children: [
-
-                      Column(
+                    const SizedBox(
+                      width: 8,
+                    ),
+                    Container(
+                      child: Row(
                         children: [
-                          IconButton(
-                            onPressed: () {},
-                            icon: Icon(CupertinoIcons.settings),
-                          ),
+                          Column(
+                            children: [
+                              IconButton(
+                                onPressed: () {},
+                                icon: Icon(CupertinoIcons.settings),
+                              ),
+                            ],
+                          )
                         ],
-                      )
-                    ],
-                  ),
-                ),
+                      ),
 
+                    ),
               ]),
+
             ),
+            SizedBox(height: 20,),
+            Container(
+              width: MediaQuery.of(context).size.width,
+              height:MediaQuery.of(context).size.width/2,
+              decoration: BoxDecoration(
+                color: Colors.blueAccent,
+                borderRadius: BorderRadius.circular(25)
+              ),
+
+              child: Column(
+                children: [
+                  Text(
+                    "Total Balance"
+                  ),
+                  Text(
+                      "Total Balance"
+                  ),
+                  Text(
+                      "Total Balance"
+                  )
+                ],
+
+              ),
+
+            )
           ],
         ),
+
       ),
     );
   }
