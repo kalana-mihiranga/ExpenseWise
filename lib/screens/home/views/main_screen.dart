@@ -9,99 +9,205 @@ class MainScreen extends StatelessWidget {
     return SafeArea(
       child: Padding(
         padding: const EdgeInsets.all(20.0),
-        child:
-        Column(
+        child: Column(
           children: [
+            // Profile section
             Container(
-
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Row(
-                      children: [
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            Container(
-                              width: 50,
-                              height: 50,
-                              decoration: const BoxDecoration(
-                                  shape: BoxShape.circle, color: Colors.blue),
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blue,
                             ),
-                            Icon(
-                              CupertinoIcons.person_fill,
-                              color: Colors.black,
+                          ),
+                          Icon(
+                            CupertinoIcons.person_fill,
+                            color: Colors.black,
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: [
+                            Text(
+                              "Welcome",
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            Text(
+                              "Kalana Mi",
+                              style: TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            children: [
-                              Text(
-                                "welcome",
-                                style: TextStyle(
-                                    fontSize: 12, fontWeight: FontWeight.w600),
-                              ),
-                              Text(
-                                "Kalana Mi",
-                                style: TextStyle(
-                                    fontSize: 20, fontWeight: FontWeight.bold),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(
-                      width: 8,
-                    ),
-                    Container(
-                      child: Row(
-                        children: [
-                          Column(
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(CupertinoIcons.settings),
-                              ),
-                            ],
-                          )
-                        ],
                       ),
-
+                    ],
+                  ),
+                  Container(
+                    child: IconButton(
+                      onPressed: () {
+                        // Add functionality for settings button here
+                      },
+                      icon: Icon(CupertinoIcons.settings),
                     ),
-              ]),
-
+                  ),
+                ],
+              ),
             ),
-            SizedBox(height: 20,),
+            SizedBox(height: 20),
+
+            // Total Balance section
             Container(
               width: MediaQuery.of(context).size.width,
-              height:MediaQuery.of(context).size.width/2,
+              height: MediaQuery.of(context).size.width / 2,
               decoration: BoxDecoration(
                 color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(25)
+                borderRadius: BorderRadius.circular(25),
+                boxShadow: [
+                  BoxShadow(
+                    blurRadius: 2,
+                  color: Colors.grey.shade500,
+                    offset: Offset(5,5)
+                  )
+                ]
               ),
 
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    "Total Balance"
+                    "Total Balance",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
-                  Text(
-                      "Total Balance"
+                  SizedBox(height: 12),
+                  const Text(
+                    "5000.00",
+                    style: TextStyle(
+                      fontSize: 30,
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Text(
-                      "Total Balance"
-                  )
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 20,
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between Income and Expense
+                      children: [
+                        // Income Section
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Colors.white30,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  CupertinoIcons.arrow_down,
+                                  size: 12,
+                                  color: Colors.green,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 9),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Income',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  '4500.00',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+
+                        // Expense Section
+                        Row(
+                          children: [
+                            Container(
+                              width: 20,
+                              height: 20,
+                              decoration: BoxDecoration(
+                                color: Colors.white30,
+                                shape: BoxShape.circle,
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  CupertinoIcons.arrow_up,
+                                  size: 12,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                            SizedBox(width: 9),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Expense',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const Text(
+                                  '1500.00',
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
                 ],
-
               ),
-
-            )
+            ),
           ],
         ),
-
       ),
     );
   }

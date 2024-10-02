@@ -24,6 +24,10 @@ dev_dependencies:
   flutter_lints: ^2.0.0
 
 flutter:
+  assets:
+            - assets/img.png
+  fonts:
+    - family: Pacifico
 
   uses-material-design: true
 
