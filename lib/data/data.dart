@@ -11,7 +11,7 @@ List<Map<String,dynamic>> myTransactionData=[
 
   },
   {
-    'icon': CupertinoIcons.memories,
+    'icon': CupertinoIcons.tray,
     'color':Colors.blueAccent,
     'name': 'Shopping',
     'totalAmount': '-48',
