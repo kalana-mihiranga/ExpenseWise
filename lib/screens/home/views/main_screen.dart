@@ -1,3 +1,4 @@
+import 'package:expense_wise/data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -76,17 +77,14 @@ class MainScreen extends StatelessWidget {
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.width / 2,
               decoration: BoxDecoration(
-                color: Colors.blueAccent,
-                borderRadius: BorderRadius.circular(25),
-                boxShadow: [
-                  BoxShadow(
-                    blurRadius: 2,
-                  color: Colors.grey.shade500,
-                    offset: Offset(5,5)
-                  )
-                ]
-              ),
-
+                  color: Colors.blueAccent,
+                  borderRadius: BorderRadius.circular(25),
+                  boxShadow: [
+                    BoxShadow(
+                        blurRadius: 2,
+                        color: Colors.grey.shade500,
+                        offset: Offset(5, 5))
+                  ]),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -113,7 +111,7 @@ class MainScreen extends StatelessWidget {
                       horizontal: 20,
                     ),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween, // Space between Income and Expense
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         // Income Section
                         Row(
@@ -206,6 +204,113 @@ class MainScreen extends StatelessWidget {
                 ],
               ),
             ),
+            const SizedBox(
+              height: 40,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Transaction',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                ),
+                GestureDetector(
+                  onTap: () {},
+                  child: Text(
+                    'View All',
+                    style: TextStyle(
+                        fontSize: 15,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w600),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(
+              height: 20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                  itemCount: myTransactionData.length,
+                  itemBuilder: (context, int i) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12)),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              // Icon and Text for Food (horizontally aligned)
+                              Row(
+                                children: [
+                                  Stack(
+                                    alignment: Alignment.center,
+                                    children: [
+                                      Container(
+                                        width: 50,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                          color:myTransactionData[i]['color'],
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.food_bank,
+                                        color: Colors.white,
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width: 12,
+                                  ),
+                                  Text(
+                                    myTransactionData[i]['name'],
+                                    style: TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+
+                              // Amount and Date
+                              Column(
+                                children: [
+                                  Text(
+                              myTransactionData[i]['totalAmount'],
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onBackground,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  Text(
+                                    myTransactionData[i]['date'],
+                                    style: TextStyle(
+                                        fontSize: 14,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .outline,
+                                        fontWeight: FontWeight.w400),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+            )
           ],
         ),
       ),
