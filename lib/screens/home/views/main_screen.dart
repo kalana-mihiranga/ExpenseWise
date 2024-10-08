@@ -2,9 +2,23 @@ import 'package:expense_wise/data/data.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class MainScreen extends StatelessWidget {
+class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
+  @override
+  State<MainScreen> createState() => _MainScreenState();
+}
+
+class _MainScreenState extends State<MainScreen> {
+  // Refresh function
+  Future<void> _refreshData() async {
+    // Simulate a network call or data fetch
+    await Future.delayed(Duration(seconds: 1));
+
+    // Update the list if needed (e.g., fetch new data)
+    // For demonstration, we'll just log that the data was refreshed
+    print("Data refreshed!");
+  }
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -253,9 +267,14 @@ class MainScreen extends StatelessWidget {
 
             // Transaction List
             Expanded(
+
+
               child: ListView.builder(
                 itemCount: myTransactionData.length,
                 itemBuilder: (context, i) {
+
+
+
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 12),
                     child: Container(

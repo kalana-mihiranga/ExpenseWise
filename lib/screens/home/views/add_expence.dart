@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
-import 'package:intl/intl.dart'; // For color picker
+import 'package:intl/intl.dart';
+
+import '../../../data/data.dart'; // For formatting currency
 
 class AddExpense extends StatefulWidget {
   const AddExpense({super.key});
@@ -13,10 +15,11 @@ class AddExpense extends StatefulWidget {
 class _AddExpenseState extends State<AddExpense> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController _amountController = TextEditingController();
-  TextEditingController _categoryController = TextEditingController();
   Color _selectedColor = Colors.green; // Default color for the category
 
   List<String> categories = ['Food', 'Transport']; // Initial categories
+  List<IconData> categoryIcons = [CupertinoIcons.car, CupertinoIcons.car]; // Initial icons
+  IconData _selectedIcon = CupertinoIcons.cube_box; // Default icon for new categories
 
   // Function to show the Date Picker
   Future<void> _selectDate(BuildContext context) async {
@@ -40,124 +43,227 @@ class _AddExpenseState extends State<AddExpense> {
     return formatter.format(int.parse(amount.replaceAll(',', '')));
   }
 
-  // Function to open the modal for creating a new category
-  void _showCategoryModal() {
-    String categoryName = '';
-    Color categoryColor = Colors.green;
+  // Function to open the modal for creating or editing a category
+  void _showCategoryModal({String? categoryToEdit}) {
+    String categoryName = categoryToEdit ?? '';
+    Color categoryColor = _selectedColor;
+    IconData selectedIcon = _selectedIcon;
 
-    showModalBottomSheet(
+    showDialog(
       context: context,
-      isScrollControlled: true,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
       builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(
-              bottom: MediaQuery.of(context).viewInsets.bottom, left: 16, right: 16, top: 16),
-          child: Wrap(
-            children: [
-              Text(
-                "Create New Category",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-
-              // Category Name
-              TextFormField(
-                decoration: InputDecoration(
-                  labelText: 'Category Name',
-                  hintText: 'Enter category name',
-                  prefixIcon: Icon(CupertinoIcons.pencil_outline),
-                  filled: true,
-                  fillColor: Colors.grey[100],
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                onChanged: (value) {
-                  categoryName = value;
-                },
-              ),
-              const SizedBox(height: 16),
-
-              // Color Picker
-              Row(
-                children: [
-                  Text(
-                    "Select Color:",
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  const SizedBox(width: 10),
-                  GestureDetector(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Pick a color'),
-                            content: SingleChildScrollView(
-                              child: BlockPicker(
-                                pickerColor: categoryColor,
-                                onColorChanged: (Color color) {
-                                  setState(() {
-                                    categoryColor = color;
-                                  });
-                                },
-                              ),
-                            ),
-                            actions: <Widget>[
-                              ElevatedButton(
-                                child: const Text('Done'),
-                                onPressed: () {
-                                  Navigator.of(context).pop();
-                                },
-                              ),
-                            ],
-                          );
-                        },
-                      );
-                    },
-                    child: CircleAvatar(
-                      backgroundColor: categoryColor,
-                      radius: 16,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 16),
-
-              // Save Category Button
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (categoryName.isNotEmpty) {
-                      setState(() {
-                        categories.add(categoryName);
-                        Navigator.pop(context);
-                      });
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                    backgroundColor: Colors.green, // Button color
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16), // Rounded button
-                    ),
-                  ),
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          backgroundColor: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Wrap(
+              children: [
+                Center(
                   child: Text(
-                    'Save Category',
+                    categoryToEdit == null
+                        ? "Create New Category"
+                        : "Edit Category",
                     style: TextStyle(
-                      fontSize: 18, // Slightly larger for readability
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white, // White text for contrast
+                      color: Colors.green[800],
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-            ],
+                const SizedBox(height: 16),
+
+                // Category Name Input
+                TextFormField(
+                  initialValue: categoryName,
+                  decoration: InputDecoration(
+                    labelText: 'Category Name',
+                    hintText: 'Enter category name',
+                    prefixIcon: Icon(CupertinoIcons.pencil_outline),
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onChanged: (value) {
+                    categoryName = value;
+                  },
+                ),
+                const SizedBox(height: 16),
+
+                // Color Picker
+                Row(
+                  children: [
+                    Text(
+                      "Select Color:",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                              title: const Text('Pick a color'),
+                              content: SingleChildScrollView(
+                                child: BlockPicker(
+                                  pickerColor: categoryColor,
+                                  onColorChanged: (Color color) {
+                                    setState(() {
+                                      categoryColor = color;
+                                    });
+                                  },
+                                ),
+                              ),
+                              actions: <Widget>[
+                                ElevatedButton(
+                                  child: const Text('Done'),
+                                  onPressed: () {
+                                    Navigator.of(context).pop();
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                      child: CircleAvatar(
+                        backgroundColor: categoryColor,
+                        radius: 16,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Icon Picker
+                Row(
+                  children: [
+                    Text(
+                      "Select Icon:",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                    const SizedBox(width: 10),
+                    GestureDetector(
+                      onTap: () {
+                        _showIconPicker(context, (IconData selected) {
+                          setState(() {
+                            selectedIcon = selected;
+                          });
+                        });
+                      },
+                      child: Icon(
+                        selectedIcon,
+                        size: 30,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 16),
+
+                // Delete Category Button (visible only when editing an existing category)
+                if (categoryToEdit != null)
+                  Center(
+                    child: TextButton(
+                      onPressed: () {
+                        setState(() {
+                          int index = categories.indexOf(categoryToEdit);
+                          categories.removeAt(index);
+                          categoryIcons.removeAt(index);
+                          Navigator.pop(context);
+                        });
+                      },
+                      style: TextButton.styleFrom(
+                        foregroundColor: Colors.red, // Red for delete button
+                      ),
+                      child: Text("Delete Category"),
+                    ),
+                  ),
+                const SizedBox(height: 16),
+
+                // Save Category Button
+                Center(
+                  child: ElevatedButton(
+                    onPressed: () {
+                      if (categoryName.isNotEmpty) {
+                        setState(() {
+                          if (categoryToEdit == null) {
+                            // Adding a new category
+                            categories.add(categoryName);
+                            categoryIcons.add(selectedIcon);
+                          } else {
+                            // Editing an existing category
+                            int index = categories.indexOf(categoryToEdit);
+                            categories[index] = categoryName;
+                            categoryIcons[index] = selectedIcon;
+                          }
+                          Navigator.pop(context);
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 32, vertical: 14),
+                      backgroundColor: Colors.green, // Button color
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16), // Rounded button
+                      ),
+                    ),
+                    child: Text(
+                      categoryToEdit == null ? 'Save Category' : 'Update Category',
+                      style: TextStyle(
+                        fontSize: 18, // Slightly larger for readability
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white, // White text for contrast
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  // Function to show the Icon Picker dialog
+  void _showIconPicker(BuildContext context, Function(IconData) onIconSelected) {
+    List<IconData> iconOptions = [
+      CupertinoIcons.car,
+      CupertinoIcons.cube_box,
+      CupertinoIcons.home,
+      CupertinoIcons.shopping_cart,
+      CupertinoIcons.heart_fill,
+      CupertinoIcons.airplane,
+      // Add more icons as needed
+    ];
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Pick an icon'),
+          content: SingleChildScrollView(
+            child: Wrap(
+              spacing: 10,
+              runSpacing: 10,
+              children: iconOptions.map((icon) {
+                return GestureDetector(
+                  onTap: () {
+                    onIconSelected(icon);
+                    Navigator.pop(context);
+                  },
+                  child: Icon(icon, size: 36),
+                );
+              }).toList(),
+            ),
           ),
         );
       },
@@ -210,74 +316,23 @@ class _AddExpenseState extends State<AddExpense> {
               child: Text(
                 "Add Expenses",
                 style: TextStyle(
-                  fontSize: 24, // Larger for prominence
-                  fontWeight: FontWeight.bold,
-                  color: Colors.green, // Use accent color for the title
+                  fontFamily: 'Roboto', // A sleek, modern font for headers
+                  fontSize: 22, // Larger for prominence
+                  fontWeight: FontWeight.w500, // Semi-bold for emphasis
+                  color: Colors.green[800], // Dark green for better visibility
                 ),
               ),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 20), // Space between header and form fields
 
-            // Category Dropdown
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Category',
-                prefixIcon: Icon(CupertinoIcons.tag),
-                filled: true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              items: categories.map((category) {
-                return DropdownMenuItem<String>(
-                  value: category,
-                  child: Text(category),
-                );
-              }).toList(),
-              onChanged: (value) {
-                _categoryController.text = value!;
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Amount Input Field with Thousand Separators
-            TextFormField(
-              controller: _amountController,
-              keyboardType: TextInputType.number, // Numeric input type for amounts
-              decoration: InputDecoration(
-                labelText: 'Amount',
-                hintText: 'Enter amount',
-                prefixIcon: Icon(CupertinoIcons.money_dollar),
-                filled: true,
-                fillColor: Colors.grey[100],
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide.none,
-                ),
-              ),
-              onChanged: (value) {
-                String formattedAmount = _formatAmount(value);
-                _amountController.value = TextEditingValue(
-                  text: formattedAmount,
-                  selection: TextSelection.collapsed(offset: formattedAmount.length),
-                );
-              },
-            ),
-            const SizedBox(height: 16),
-
-            // Date Input Field with DatePicker
+            // Date Input Field
             TextFormField(
               controller: _dateController,
-              readOnly: true, // Make the field read-only
-              onTap: () {
-                _selectDate(context); // Show Date Picker when tapped
-              },
+              readOnly: true,
               decoration: InputDecoration(
                 labelText: 'Date',
                 hintText: 'Select date',
-                prefixIcon: Icon(CupertinoIcons.calendar),
+                prefixIcon: Icon(Icons.calendar_today),
                 filled: true,
                 fillColor: Colors.grey[100],
                 border: OutlineInputBorder(
@@ -285,28 +340,100 @@ class _AddExpenseState extends State<AddExpense> {
                   borderSide: BorderSide.none,
                 ),
               ),
+              onTap: () => _selectDate(context),
             ),
-            const SizedBox(height: 32),
+            const SizedBox(height: 16),
 
-            // Save Button
+            // Amount Input Field
+            TextFormField(
+              controller: _amountController,
+              decoration: InputDecoration(
+                labelText: 'Amount',
+                hintText: 'Enter amount',
+                prefixIcon: Icon(Icons.attach_money),
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  _amountController.text = _formatAmount(value);
+                  _amountController.selection = TextSelection.fromPosition(TextPosition(offset: _amountController.text.length));
+                });
+              },
+            ),
+            const SizedBox(height: 16),
+
+            // Category Selector
+            DropdownButtonFormField<String>(
+              decoration: InputDecoration(
+                labelText: 'Select Category',
+                filled: true,
+                fillColor: Colors.grey[100],
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide.none,
+                ),
+              ),
+              items: categories.map((String category) {
+                return DropdownMenuItem<String>(
+                  value: category,
+                  child: Row(
+                    children: [
+                      Icon(
+                        categoryIcons[categories.indexOf(category)], // Get the corresponding icon
+                        color: Colors.green[700],
+                      ),
+                      SizedBox(width: 10),
+                      Text(category),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {},
+              hint: Text('Choose a category'),
+            ),
+            const SizedBox(height: 20),
+
+            // Submit Button
             Center(
               child: ElevatedButton(
                 onPressed: () {
-                  // Add save functionality
+
+                  setState(() {
+                    myTransactionData.add({
+                      'icon': _selectedIcon, // Add the selected icon
+                      'color': _selectedColor, // Add the selected color
+                      'name': categories[0], // Assuming first category is selected, you can enhance it later
+                      'totalAmount': '-${_amountController.text}', // Add amount
+                      'date': _dateController.text, // Add date
+                    });
+
+                    // Clear the input fields after submission
+                    _amountController.clear();
+                    _dateController.clear();
+                  });
+
+                  // Logic for saving the expense can go here
+                  print("Expense Added: ${_amountController.text} on ${_dateController.text}");
                 },
                 style: ElevatedButton.styleFrom(
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-                  backgroundColor: Colors.green, // Button color
+                  backgroundColor: Colors.green,
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16), // Rounded button
+                    borderRadius: BorderRadius.circular(16),
                   ),
                 ),
                 child: Text(
-                  'Save',
+                  'Add Expense',
                   style: TextStyle(
-                    fontSize: 18, // Slightly larger for readability
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white, // White text for contrast
+                    color: Colors.white,
                   ),
                 ),
               ),

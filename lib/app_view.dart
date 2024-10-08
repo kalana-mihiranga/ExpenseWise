@@ -1,3 +1,4 @@
+import 'package:expense_wise/process/addTransaction.dart';
 import 'package:expense_wise/screens/home/views/home_screens.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +23,9 @@ class MyAppView extends StatelessWidget {
       ),
 
       home:HomeScreen(),
+
+
+
     );
   }
 }

@@ -6,6 +6,7 @@ List<Map<String,dynamic>> myTransactionData=[
     'icon': CupertinoIcons.memories,
     'color':Colors.yellow,
     'name': 'Food',
+    'place': 'Colombo 05',
     'totalAmount': '-45',
     'date': 'Today',
 
@@ -14,56 +15,10 @@ List<Map<String,dynamic>> myTransactionData=[
     'icon': CupertinoIcons.tray,
     'color':Colors.blueAccent,
     'name': 'Shopping',
+    'place': 'Colombo 05',
     'totalAmount': '-48',
     'date': 'Today',
 
   },
-  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.purple,
-    'name': 'Health',
-    'totalAmount': '-45',
-    'date': 'Today',
 
-  }
-  ,  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.green,
-    'name': 'Travel',
-    'totalAmount': '-415',
-    'date': 'Today',
-
-  }
-  ,  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.green,
-    'name': 'Travel',
-    'totalAmount': '-415',
-    'date': 'Today',
-
-  }
-  ,  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.green,
-    'name': 'Travel',
-    'totalAmount': '-415',
-    'date': 'Today',
-
-  }
-  ,  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.green,
-    'name': 'Travel',
-    'totalAmount': '-415',
-    'date': 'Today',
-
-  }
-  ,  {
-    'icon': CupertinoIcons.memories,
-    'color':Colors.green,
-    'name': 'Travel',
-    'totalAmount': '-415',
-    'date': 'Today',
-
-  }
 ];

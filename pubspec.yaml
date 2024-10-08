@@ -18,6 +18,8 @@ dependencies:
   cupertino_icons: ^1.0.0
   font_awesome_flutter: ^10.4.0
   fl_chart: ^0.62.0
+  sqflite: ^2.2.5
+  path_provider: ^2.0.1
 
 
 dev_dependencies:
