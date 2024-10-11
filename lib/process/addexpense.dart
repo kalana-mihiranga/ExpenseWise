@@ -1,217 +1,126 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-
+import 'package:intl/intl.dart';
 import '../databasehelper/Databasehelper.dart';
-import '../icons/icons.dart'; // Assuming you have a map of icons in this file
+import '../icons/icons.dart';
 
-class InputForm extends StatefulWidget {
-  final String? category; // Add category as an optional parameter
 
-  const InputForm({super.key, this.category});
+class ExpenseForm extends StatefulWidget {
+  const ExpenseForm({super.key});
 
   @override
-  State<InputForm> createState() => _InputFormState();
+  State<ExpenseForm> createState() => _ExpenseFormState();
 }
 
-class _InputFormState extends State<InputForm> {
-  final _titleController = TextEditingController();
-  final _amountController = TextEditingController();
-  DateTime? _selectedDate;
-  late String _selectedCategory;
+class _ExpenseFormState extends State<ExpenseForm> {
+  final _title = TextEditingController();
+  final _amount = TextEditingController();
+  DateTime? _date;
+  String _initialValue = 'Other';
 
-  @override
-  void initState() {
-    super.initState();
-    // Initialize selected category with the category passed from the previous screen
-    _selectedCategory = widget.category ?? 'Other';
-  }
-
-  @override
-  void dispose() {
-    _titleController.dispose();
-    _amountController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _pickDate() async {
+  //
+  _pickDate() async {
     DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2022),
-      lastDate: DateTime.now(),
-      builder: (context, child) {
-        return Theme(
-          data: ThemeData.light().copyWith(
-            primaryColor: Colors.blue, // Change the header color
-            accentColor: Colors.blue, // Change the accent color
-            colorScheme: ColorScheme.light(primary: Colors.blue), // Change the header color
-            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
-          ),
-          child: child ?? const Text(''),
-        );
-      },
-    );
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2022),
+        lastDate: DateTime.now());
 
     if (pickedDate != null) {
       setState(() {
-        _selectedDate = pickedDate;
+        _date = pickedDate;
       });
     }
   }
 
+  //
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DatabaseProvider>(context, listen: false);
-
-    return AlertDialog(
-      title: const Text('Add Expense', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-      backgroundColor: Colors.transparent, // Make background transparent
-      content: SizedBox(
-        width: double.maxFinite, // To take full width
-        child: SingleChildScrollView(
-          child: Container(
-            padding: const EdgeInsets.all(20), // Add padding for content
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.9), // Slightly white background for the content
-              borderRadius: BorderRadius.circular(10.0), // Rounded corners
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.7,
+      padding: const EdgeInsets.all(20.0),
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            // title
+            TextField(
+              controller: _title,
+              decoration: const InputDecoration(
+                labelText: 'Title of expense',
+              ),
             ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
+            const SizedBox(height: 20.0),
+            // amount
+            TextField(
+              controller: _amount,
+              keyboardType: TextInputType.number,
+              decoration: const InputDecoration(
+                labelText: 'Amount of expense',
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            // date picker
+            Row(
               children: [
-                // Title
-                TextField(
-                  controller: _titleController,
-                  decoration: InputDecoration(
-                    labelText: 'Title of Expense',
-                    labelStyle: const TextStyle(color: Colors.blue),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
+                Expanded(
+                  child: Text(_date != null
+                      ? DateFormat('MMMM dd, yyyy').format(_date!)
+                      : 'Select Date'),
                 ),
-                const SizedBox(height: 20.0),
-
-                // Amount
-                TextField(
-                  controller: _amountController,
-                  keyboardType: TextInputType.number,
-                  decoration: InputDecoration(
-                    labelText: 'Amount of Expense',
-                    labelStyle: const TextStyle(color: Colors.blue),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(color: Colors.blue, width: 2.0),
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 20.0),
-
-                // Date Picker
-                Row(
-                  children: [
-                    Expanded(
-                      child: Text(
-                        _selectedDate != null
-                            ? DateFormat('MMMM dd, yyyy').format(_selectedDate!)
-                            : 'Select Date',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ),
-                    IconButton(
-                      onPressed: _pickDate,
-                      icon: const Icon(Icons.calendar_today, color: Colors.blue),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-
-                // Category Dropdown
-                Row(
-                  children: [
-                    const Expanded(child: Text('Category')),
-                    Expanded(
-                      child: DropdownButton<String>(
-                        isExpanded: true,
-                        items: icons.keys
-                            .map(
-                              (category) => DropdownMenuItem<String>(
-                            value: category,
-                            child: Text(category),
-                          ),
-                        )
-                            .toList(),
-                        value: _selectedCategory,
-                        onChanged: (String? newValue) {
-                          if (newValue != null) {
-                            setState(() {
-                              _selectedCategory = newValue;
-                            });
-                          }
-                        },
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 20.0),
-
-                // Button Row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Cancel Button
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.grey,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                      child: const Text('Cancel'),
-                    ),
-                    // Submit Button
-                    ElevatedButton.icon(
-                      onPressed: () {
-                        if (_titleController.text.isNotEmpty &&
-                            _amountController.text.isNotEmpty &&
-                            _selectedDate != null) {
-                          final newExpense = Expense(
-                            id: 0,
-                            title: _titleController.text,
-                            amount: double.parse(_amountController.text),
-                            date: _selectedDate!,
-                            category: _selectedCategory,
-                          );
-
-                          provider.addExpense(newExpense);
-                          Navigator.of(context).pop(); // Close the dialog
-                        }
-                      },
-                      icon: const Icon(Icons.add),
-                      label: const Text('Add Expense'),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.blue,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10.0),
-                        ),
-                      ),
-                    ),
-                  ],
+                IconButton(
+                  onPressed: () => _pickDate(),
+                  icon: const Icon(Icons.calendar_month),
                 ),
               ],
             ),
-          ),
+            const SizedBox(height: 20.0),
+            // category
+            Row(
+              children: [
+                const Expanded(child: Text('Category')),
+                Expanded(
+                  child: DropdownButton(
+                    items: icons.keys
+                        .map(
+                          (e) => DropdownMenuItem(
+                        value: e,
+                        child: Text(e),
+                      ),
+                    )
+                        .toList(),
+                    value: _initialValue,
+                    onChanged: (newValue) {
+                      setState(() {
+                        _initialValue = newValue!;
+                      });
+                    },
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+            ElevatedButton.icon(
+              onPressed: () {
+                if (_title.text != '' && _amount.text != '') {
+                  // create an expense
+                  final file = Expense(
+                    id: 0,
+                    title: _title.text,
+                    amount: double.parse(_amount.text),
+                    date: _date != null ? _date! : DateTime.now(),
+                    category: _initialValue,
+                  );
+                  // add it to database.
+                  provider.addExpense(file);
+                  // close the bottomsheet
+                  Navigator.of(context).pop();
+                }
+              },
+              icon: const Icon(Icons.add),
+              label: const Text('Add Expense'),
+            ),
+          ],
         ),
       ),
     );
