@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../../view/AllExpensefetcher.dart';
-
 
 class AllExpenses extends StatefulWidget {
   const AllExpenses({super.key});
@@ -15,8 +13,10 @@ class _AllExpensesState extends State<AllExpenses> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('All Expenses')),
-      body: const AllExpensesFetcher(),
+      body: Padding(
+        padding: const EdgeInsets.only(top: 40.0), // Add top padding
+        child: const AllExpensesFetcher(),
+      ),
     );
   }
 }

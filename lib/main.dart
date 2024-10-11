@@ -1,14 +1,15 @@
+
+import 'package:expense_wise/databasehelper/Databasehelper.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'app.dart';
-import 'databasehelper/Databasehelper.dart';
+import 'app_view.dart';
 
 void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => DatabaseProvider()), // Wrap the provider
+        ChangeNotifierProvider(create: (_) => DatabaseProvider()), // Adjust based on your actual provider
       ],
       child: const MyApp(),
     ),

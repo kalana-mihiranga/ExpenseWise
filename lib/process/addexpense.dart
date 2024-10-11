@@ -4,7 +4,6 @@ import 'package:intl/intl.dart';
 import '../databasehelper/Databasehelper.dart';
 import '../icons/icons.dart';
 
-
 class ExpenseForm extends StatefulWidget {
   const ExpenseForm({super.key});
 
@@ -18,13 +17,24 @@ class _ExpenseFormState extends State<ExpenseForm> {
   DateTime? _date;
   String _initialValue = 'Other';
 
-  //
   _pickDate() async {
     DateTime? pickedDate = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2022),
-        lastDate: DateTime.now());
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2022),
+      lastDate: DateTime.now(),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            primaryColor: Colors.blueAccent, // Header color
+            accentColor: Colors.blueAccent, // Button color
+            colorScheme: ColorScheme.light(primary: Colors.blueAccent),
+            buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
+          ),
+          child: child!,
+        );
+      },
+    );
 
     if (pickedDate != null) {
       setState(() {
@@ -33,49 +43,85 @@ class _ExpenseFormState extends State<ExpenseForm> {
     }
   }
 
-  //
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<DatabaseProvider>(context, listen: false);
     return Container(
-      height: MediaQuery.of(context).size.height * 0.7,
+      height: MediaQuery.of(context).size.height * 0.75,
       padding: const EdgeInsets.all(20.0),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.vertical(top: Radius.circular(30.0)),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black26,
+            blurRadius: 10,
+            offset: Offset(0, -5), // Shadow position
+          ),
+        ],
+      ),
       child: SingleChildScrollView(
         child: Column(
           children: [
-            // title
+            // Title
             TextField(
               controller: _title,
-              decoration: const InputDecoration(
-                labelText: 'Title of expense',
+              decoration: InputDecoration(
+                labelText: 'Title of Expense',
+                labelStyle: TextStyle(color: Colors.grey[600]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                ),
               ),
             ),
             const SizedBox(height: 20.0),
-            // amount
+
+            // Amount
             TextField(
               controller: _amount,
               keyboardType: TextInputType.number,
-              decoration: const InputDecoration(
-                labelText: 'Amount of expense',
+              decoration: InputDecoration(
+                labelText: 'Amount of Expense',
+                labelStyle: TextStyle(color: Colors.grey[600]),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.grey, width: 1),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: Colors.blueAccent, width: 2),
+                ),
               ),
             ),
             const SizedBox(height: 20.0),
-            // date picker
+
+            // Date Picker
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(_date != null
-                      ? DateFormat('MMMM dd, yyyy').format(_date!)
-                      : 'Select Date'),
+                  child: Text(
+                    _date != null
+                        ? DateFormat('MMMM dd, yyyy').format(_date!)
+                        : 'Select Date',
+                    style: TextStyle(color: Colors.grey[700]),
+                  ),
                 ),
                 IconButton(
                   onPressed: () => _pickDate(),
-                  icon: const Icon(Icons.calendar_month),
+                  icon: const Icon(Icons.calendar_today),
+                  color: Colors.blueAccent,
                 ),
               ],
             ),
             const SizedBox(height: 20.0),
-            // category
+
+            // Category Dropdown
             Row(
               children: [
                 const Expanded(child: Text('Category')),
@@ -95,15 +141,28 @@ class _ExpenseFormState extends State<ExpenseForm> {
                         _initialValue = newValue!;
                       });
                     },
+                    isExpanded: true,
+                    underline: Container(
+                      height: 1,
+                      color: Colors.grey,
+                    ),
                   ),
                 ),
               ],
             ),
             const SizedBox(height: 20.0),
+
+            // Add Expense Button
             ElevatedButton.icon(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.blueAccent,
+                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
               onPressed: () {
-                if (_title.text != '' && _amount.text != '') {
-                  // create an expense
+                if (_title.text.isNotEmpty && _amount.text.isNotEmpty) {
                   final file = Expense(
                     id: 0,
                     title: _title.text,
@@ -111,9 +170,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
                     date: _date != null ? _date! : DateTime.now(),
                     category: _initialValue,
                   );
-                  // add it to database.
                   provider.addExpense(file);
-                  // close the bottomsheet
                   Navigator.of(context).pop();
                 }
               },

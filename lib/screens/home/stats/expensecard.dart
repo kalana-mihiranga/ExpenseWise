@@ -5,7 +5,6 @@ import '../../../databasehelper/Databasehelper.dart';
 import '../../../icons/icons.dart';
 import 'ConfirmBox.dart';
 
-
 class ExpenseCard extends StatelessWidget {
   final Expense exp;
   const ExpenseCard(this.exp, {super.key});
@@ -20,15 +19,46 @@ class ExpenseCard extends StatelessWidget {
           builder: (_) => ConfirmBox(exp: exp),
         );
       },
-      child: ListTile(
-        leading: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Icon(icons[exp.category]),
+      child: Card(
+        elevation: 4, // Adds a shadow for depth
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10), // Rounded corners
         ),
-        title: Text(exp.title),
-        subtitle: Text(DateFormat('MMMM dd, yyyy').format(exp.date)),
-        trailing: Text(NumberFormat.currency(locale: 'en_IN', symbol: '₹')
-            .format(exp.amount)),
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0), // Margin around the card
+        child: ListTile(
+          contentPadding: const EdgeInsets.all(16.0), // Padding inside the card
+          leading: CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.blueAccent, // Background color for the icon
+            child: Icon(
+              icons[exp.category],
+              color: Colors.white, // Icon color
+              size: 30, // Icon size
+            ),
+          ),
+          title: Text(
+            exp.title,
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          subtitle: Text(
+            DateFormat('MMMM dd, yyyy').format(exp.date),
+            style: const TextStyle(
+              color: Colors.grey,
+              fontSize: 14,
+            ),
+          ),
+          trailing: Text(
+            NumberFormat.currency(locale: 'en_IN', symbol: '₹').format(exp.amount),
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.green, // Change color to green for positive amount
+            ),
+          ),
+        ),
       ),
     );
   }

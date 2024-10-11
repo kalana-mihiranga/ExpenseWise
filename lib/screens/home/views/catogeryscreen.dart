@@ -1,5 +1,7 @@
+import 'package:expense_wise/screens/home/views/settingsview.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'ProfileView.dart';
 
 import '../../../process/addexpense.dart';
 import '../../view/fetchcatogery.dart';
@@ -11,90 +13,75 @@ class CategoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Enhanced AppBar with gradient background
-      appBar: AppBar(
-        title: Text(
-          'Expense Wise',
-          style: TextStyle(
-            fontFamily: 'Pacifico', // A modern, elegant font
-            fontSize: 26, // Slightly larger for prominence
-            fontWeight: FontWeight.w600, // Semi-bold for better readability
-            color: Colors.white, // White text for contrast
-            letterSpacing: 1.5, // Increased letter spacing for a cleaner feel
-            shadows: [
-              Shadow(
-                blurRadius: 4.0,
-                color: Colors.black.withOpacity(0.4), // Soft shadow for depth
-              ),
-            ],
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Colors.blueAccent, Colors.red],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-          ),
-        ),
-      ),
-
-      // Adding the Profile and Total Balance section
       body: Padding(
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 50.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Profile section with welcome message
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Row(
-                  children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          width: 50,
-                          height: 50,
-                          decoration: const BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.blue,
+                // Profile Icon Gesture
+                GestureDetector(
+                  onTap: () {
+                    // Show the ProfileView when the profile icon is clicked
+                    showModalBottomSheet(
+                      context: context,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                      ),
+                      isScrollControlled: true,
+                      builder: (_) => const ProfileView(),
+                    );
+                  },
+                  child: Row(
+                    children: [
+                      Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 50,
+                            height: 50,
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.blue,
+                            ),
                           ),
-                        ),
-                        const Icon(
-                          CupertinoIcons.person_fill,
-                          color: Colors.white,
-                          size: 30,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(width: 12),
-                     Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Welcome",
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: Colors.grey,
-                            fontWeight: FontWeight.w400,
+                          const Icon(
+                            CupertinoIcons.person_fill,
+                            color: Colors.white,
+                            size: 30,
                           ),
-                        ),
-                        SizedBox(height: 4),
-                        Text(
-                          "Kalana Mi",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.black,
-                            fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                      const SizedBox(width: 12),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "Welcome",
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+                          const SizedBox(height: 4),
+                          Text(
+                            "Kalana Mi",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
+
+                // Settings Icon Gesture
                 Container(
                   decoration: BoxDecoration(
                     border: Border.all(color: Colors.grey.shade300),
@@ -102,7 +89,15 @@ class CategoryScreen extends StatelessWidget {
                   ),
                   child: IconButton(
                     onPressed: () {
-                      // Add functionality for settings button
+                      // Show the SettingsView when the settings icon is clicked
+                      showModalBottomSheet(
+                        context: context,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                        ),
+                        isScrollControlled: true,
+                        builder: (_) => const SettingsView(),
+                      );
                     },
                     icon: const Icon(CupertinoIcons.settings),
                     color: Colors.black54,
@@ -110,31 +105,38 @@ class CategoryScreen extends StatelessWidget {
                 ),
               ],
             ),
-
-
             const Expanded(child: CategoryFetcher()),
           ],
         ),
       ),
-
-      // Enhanced Floating Action Button
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          showModalBottomSheet(
-            context: context,
-            isScrollControlled: true,
-            builder: (_) => const ExpenseForm(),
-          );
-        },
-        shape: const CircleBorder(),
-        child: const Icon(
-          CupertinoIcons.add,
-          size: 28,
+      floatingActionButton: Container(
+        width: 70,
+        height: 70,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          gradient: const LinearGradient(
+            colors: [Colors.blueAccent, Colors.red],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
         ),
-
-        backgroundColor: Colors.blueAccent,
-        splashColor: Colors.lightGreen,
+        child: FloatingActionButton(
+          onPressed: () {
+            showModalBottomSheet(
+              context: context,
+              isScrollControlled: true,
+              builder: (_) => const ExpenseForm(),
+            );
+          },
+          child: const Icon(
+            CupertinoIcons.add,
+            size: 32, // Larger icon for better visibility
+          ),
+          backgroundColor: Colors.transparent, // Make FAB transparent to show gradient
+          elevation: 0, // Remove shadow
+        ),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
     );
   }
 }
