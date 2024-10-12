@@ -28,10 +28,17 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-
+  flutter_launcher_icons: "^0.10.0"
 
   flutter_lints: ^2.0.0
   flutter_colorpicker: ^1.0.3
+
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/img.png"
+
 
 flutter:
   assets:
