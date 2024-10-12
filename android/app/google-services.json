@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "912956295652",
+    "project_id": "expense-wise-821eb",
+    "storage_bucket": "expense-wise-821eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:912956295652:android:e9a75c176b26d9824a9ff1",
+        "android_client_info": {
+          "package_name": "com.example.expense_wise"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCNFLEqyZgEkAsDpL9bsIOki7jTuPM4jHA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
