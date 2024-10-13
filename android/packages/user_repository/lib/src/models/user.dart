@@ -1,5 +1,7 @@
 import 'package:equatable/equatable.dart';
 
+import '../entity/entity.dart';
+
 class MyUser extends Equatable{
   final String userId;
   final String email;
@@ -11,6 +13,14 @@ class MyUser extends Equatable{
     required this.name
 
 });
+
+  MyUserEntity toEntity() {
+    return MyUserEntity(
+        userId: userId,
+        email: email,
+        name: name
+    );
+  }
 
   static const empty=MyUser(userId: '', email: '', name: '');
 
