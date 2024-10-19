@@ -49,7 +49,7 @@ class ConfirmBox extends StatelessWidget {
             provider.deleteExpense(exp.id, exp.category, exp.amount);
           },
           style: ElevatedButton.styleFrom(
-            primary: Colors.blueAccent, // Button background color
+            backgroundColor: Colors.blueAccent, // Button background color
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8), // Rounded corners for the button
             ),

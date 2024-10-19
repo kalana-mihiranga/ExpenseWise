@@ -27,7 +27,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
         return Theme(
           data: ThemeData.light().copyWith(
             primaryColor: Colors.blueAccent, // Header color
-            accentColor: Colors.blueAccent, // Button color
+            hintColor: Colors.blueAccent, // Button color
             colorScheme: ColorScheme.light(primary: Colors.blueAccent),
             buttonTheme: ButtonThemeData(textTheme: ButtonTextTheme.primary),
           ),
@@ -155,7 +155,7 @@ class _ExpenseFormState extends State<ExpenseForm> {
             // Add Expense Button
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
-                primary: Colors.blueAccent,
+                backgroundColor: Colors.blueAccent,
                 padding: EdgeInsets.symmetric(vertical: 15, horizontal: 30),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
