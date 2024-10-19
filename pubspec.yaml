@@ -1,50 +1,43 @@
 name: expense_wise
 description: A new Flutter project.
 
-
 publish_to: 'none'
-
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.19.0-146.2.beta <3.0.0'
-
+  sdk: '>=2.19.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
-  intl: ^0.17.0
-  cupertino_icons: ^1.0.0
-  font_awesome_flutter: ^10.4.0
+  intl: ^0.18.1                  # Updated to latest version
+  cupertino_icons: ^1.0.6        # Updated to latest version
+  font_awesome_flutter: ^10.5.1  # Updated to latest version
   fl_chart: ^0.62.0
-  sqflite: ^2.2.5
-  path: ^1.8.2
-  path_provider: ^2.0.1
-  provider: ^6.0.3
-
-
+  sqflite: ^2.3.0                # Updated to latest version
+  path: ^1.8.3                   # Updated to latest version
+  path_provider: ^2.0.16         # Updated to latest version
+  provider: ^6.1.2             # Updated to latest version
+  user_repository:
+    path: packages/user_repository
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: "^0.10.0"
-
-  flutter_lints: ^2.0.0
-  flutter_colorpicker: ^1.0.3
-
+  flutter_launcher_icons: ^0.13.1  # Updated to latest version
+  flutter_lints: ^2.0.1            # Updated to latest version
+  flutter_colorpicker: ^1.1.0      # Updated to latest version
 
 flutter_icons:
   android: true
   ios: true
   image_path: "assets/img.png"
 
-
 flutter:
   assets:
-            - assets/img.png
+    - assets/img.png
   fonts:
     - family: Pacifico
-
   uses-material-design: true
-

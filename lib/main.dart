@@ -9,7 +9,7 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(create: (_) => DatabaseProvider()), // Adjust based on your actual provider
+        ChangeNotifierProvider(create: (_) => DatabaseProvider()),
       ],
       child: const MyApp(),
     ),
